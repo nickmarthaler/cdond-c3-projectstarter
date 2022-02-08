@@ -48,9 +48,9 @@ jobs:
             npm run build
           # 'exit 1 is testing forced error'
           #  exit 1
-      - save_cache:
-          paths: [frontend/node_modules]
-          key: frontend-build
+      # - save_cache:
+      #     paths: [frontend/node_modules]
+      #     key: frontend-build
 
   build-backend:
     docker:
@@ -67,9 +67,9 @@ jobs:
             npm run build
           # 'exit 1 is testing forced error'
           #  exit 1
-      - save_cache:
-          paths: [backend/node_modules]
-          key: backend-build
+      # - save_cache:
+      #     paths: [backend/node_modules]
+      #     key: backend-build
 
   test-frontend:
     docker:
