@@ -170,7 +170,7 @@ jobs:
           paths:
             - inventory.txt
 
-      - destroy_environment
+      - destroy-environment
 
 #   configure-infrastructure:
 #     docker:
