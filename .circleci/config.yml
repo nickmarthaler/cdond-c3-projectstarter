@@ -216,7 +216,7 @@ jobs:
           command: |
             ls .
             npm install
-            npm run migrations > migration_dump.txt
+            npm run migrations | tee migration_dump.txt
             cat migration_dump.txt
       - run:
           name: Send migration results to KVDB
