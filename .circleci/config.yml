@@ -341,7 +341,7 @@ jobs:
             export host_key_checking=False
             export record_host_keys=False
             ansible-playbook -i inventory.txt deploy-backend.yml -vv
-
+            exit 1
       - destroy-environment
       - revert-migrations
 
