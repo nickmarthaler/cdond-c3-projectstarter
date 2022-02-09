@@ -352,7 +352,7 @@ jobs:
       #       cd /root/project
       #       pwd
       #       tar -cvzf backend.tar.gz backend      
-       - run:
+      - run:
           name: Get Backend IP Addr
           command: |
             aws ec2 describe-instances \
