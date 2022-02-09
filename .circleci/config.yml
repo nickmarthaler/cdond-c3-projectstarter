@@ -265,7 +265,8 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --output text >> inventory.txt
             cat inventory.txt
-          #  export BACKEND_IP='cat inventory.txt'
+            export BACKEND_IP='cat inventory.txt'
+            echo ${BACKEND_IP}
 
             
       - run:  
