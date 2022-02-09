@@ -214,6 +214,7 @@ jobs:
           name: Run migrations
           working_directory: ./backend
           command: |
+            pwd
             ls .
             npm install
             npm run migrations | tee migration_dump.txt
@@ -221,7 +222,9 @@ jobs:
       - run:
           name: Send migration results to KVDB
           working_directory: ./backend
-          command: |        
+          command: |
+            pwd
+            ls
             if grep -q "has been executed successfully" migration_dump.txt
             then
             curl https://kvdb.io/KBYf9Y4XGmLYrZEV7QfLcn/migration_$\{CIRCLE_WORKFLOW_ID:0:7\} -d '1'
