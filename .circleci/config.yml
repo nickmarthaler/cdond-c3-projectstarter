@@ -225,12 +225,7 @@ jobs:
             then
             curl https://kvdb.io/KBYf9Y4XGmLYrZEV7QfLcn/migration_$\{CIRCLE_WORKFLOW_ID:0:7\} -d '1'
             fi
-      - run:
-          name: View Results of KVDB
-          command: |
-          #View KVDB Value:  
-            curl --insecure https://kvdb.io/KBYf9Y4XGmLYrZEV7QfLcn/migration_$\{CIRCLE_WORKFLOW_ID:0:7\}
-            
+
       - destroy-environment 
 
 #   deploy-frontend:
