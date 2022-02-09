@@ -15,23 +15,15 @@ commands:
         #    exit 1
 
   revert-migrations:
-    description: Revert the last migration if successfully run in the current workflow.
-    parameters:
-      # Add parameter here     
+    description: Revert the last migration if successfully run in the current workflow.     
     steps:
       - run:
           name: Revert migrations
-          # Add when this will run
           command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
-            if(( $SUCCESS==1 )); 
-            then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
-              exit 1
-            fi
+            cd ~/project/backend
+            npm install
+            npm run migrations:revert
+          when: on_fail
             
 jobs:
   # build-frontend:
@@ -265,10 +257,14 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --output text >> inventory.txt
             cat inventory.txt
-            export BACKEND_IP='cat inventory.txt'
-            echo ${BACKEND_IP}
-
-            
+            export BACKEND_IP=`cat inventory.txt`
+            echo $BACKEND_IP
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "API_URL = ${API_URL}"
+            echo API_URL="http://${BACKEND_IP}:3030" >> "frontend/.env"
+            echo ENVIRONMENT=production  >> "frontend/.env" 
+            echo NODE_ENV=production >> "frontend/.env"
+     
       - run:  
           name: configure server
           working_directory: ./frontend         
