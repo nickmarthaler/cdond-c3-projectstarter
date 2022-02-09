@@ -247,9 +247,9 @@ jobs:
           command: |
             aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --output text >> inventory.txt
-            cat inventory.txt
-            export BACKEND_IP=`cat inventory.txt`
+            --output text >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
+            export BACKEND_IP=`cat .circleci/ansible/inventory.txt`
             echo $BACKEND_IP
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
@@ -328,12 +328,10 @@ jobs:
           command: |
             pwd
             cat inventory.txt
-            cat ~/tmp/ansible/inventory.txt
-            cat ~/inventory.txt
             export ANSIBLE_HOST_KEY_CHECKING=False 
             export host_key_checking=False
             export record_host_keys=False
-            ansible-playbook -i ~/tmp/inventory.txt deploy-backend.yml -vv
+            ansible-playbook -i inventory.txt deploy-backend.yml -vv
 
       - destroy-environment
       - revert-migrations
