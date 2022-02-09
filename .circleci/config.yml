@@ -291,54 +291,75 @@ jobs:
           fingerprints: ["58:01:95:59:6e:be:db:1c:e2:4f:53:ae:f3:ed:82:40"]
       - attach_workspace:
           at: .circleci/ansible
-
       - run:
           name: Install dependencies
-          working_directory: ./.circleci/ansible          
+          working_directory: ./.circleci/ansible
           command: |
-            cat inventory.txt
-            apk add --update ansible curl rsync openssh nodejs npm unzip
-            npm install
-            ansible --version
-            pip3 install --upgrade pip
-            pip3 install awscli
-            aws --version 
-            export ANSIBLE_HOST_KEY_CHECKING=False
+            apk add --no-cache \
+            python3 \
+            py3-pip \
+            && pip3 install --upgrade pip \
+            && pip3 install \
+            awscli \
+            && rm -rf /var/cache/apk/*
+            apk add --update ansible
+            apk add --update tar gzip curl
+            apk add --update openssh-client
+            apk add --update nodejs npm
+      - run:
+          name: Build Backend Files
+          command: |
+            cd backend
+            npm i
+            npm run build
+            cp package* ./dist
+            cd ..
+      - run:
+          name: Compress Dist Files
+          command: |
+            tar -C backend -czvf artifact.tar.gz .
+            pwd
+            cd .circleci/ansible
 
       # - run:
-      #     name: Get Backend IP Addr
+      #     name: Install dependencies
+      #     working_directory: ./.circleci/ansible          
       #     command: |
-      #       aws ec2 describe-instances \
-      #       --query 'Reservations[*].Instances[*].PublicIpAddress' \
-      #       --output text >> .circleci/ansible/inventory.txt
-      #       cat .circleci/ansible/inventory.txt
-      - run:
+      #       cat inventory.txt
+      #       apk add --update ansible curl rsync openssh nodejs npm unzip
+      #       npm install
+      #       ansible --version
+      #       pip3 install --upgrade pip
+      #       pip3 install awscli
+      #       aws --version 
+      #       export ANSIBLE_HOST_KEY_CHECKING=False
+
+      # - run:
+      #     name: install node modules
+      #     command: |
+      #       cd /root/project/backend
+      #       npm install
+      # - run:
+      #     name: build backend dist
+      #     command: |
+      #       cd /root/project/backend
+      #       npm i
+      #       npm run build
+      #       npm run prestart:prod      
+      # - run:
+      #     name: Compress dist files on SYSTEM
+      #     command: |
+      #       cd /root/project
+      #       pwd
+      #       tar -cvzf backend.tar.gz backend      
+       - run:
           name: Get Backend IP Addr
           command: |
             aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --output text >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
-            
-      - run:
-          name: install node modules
-          command: |
-            cd /root/project/backend
-            npm install
-      - run:
-          name: build backend dist
-          command: |
-            cd /root/project/backend
-            npm i
-            npm run build
-            npm run prestart:prod      
-      - run:
-          name: Compress dist files on SYSTEN
-          command: |
-            cd /root/project
-            pwd
-            tar -cvzf backend.tar.gz backend      
-      
+
       - run:
           name: Deploy backend
           working_directory: ./.circleci/ansible
