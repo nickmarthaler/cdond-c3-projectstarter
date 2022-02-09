@@ -292,6 +292,14 @@ jobs:
           at: .
 
       - run:
+          name: Get Backend IP Addr
+          command: |
+            aws ec2 describe-instances \
+            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            --output text >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
+
+      - run:
           name: Install dependencies
           working_directory: ./.circleci/ansible          
           command: |
