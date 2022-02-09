@@ -158,6 +158,7 @@ jobs:
             aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --output text >> inventory.txt
+            
             cat inventory.txt
 
       - persist_to_workspace:
@@ -311,7 +312,14 @@ jobs:
       #       --query 'Reservations[*].Instances[*].PublicIpAddress' \
       #       --output text >> .circleci/ansible/inventory.txt
       #       cat .circleci/ansible/inventory.txt
-
+      - run:
+          name: Get Backend IP Addr
+          command: |
+            aws ec2 describe-instances \
+            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            --output text >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
+            
       - run:
           name: install node modules
           command: |
