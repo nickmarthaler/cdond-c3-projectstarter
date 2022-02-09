@@ -7,14 +7,14 @@
 - name: copy backend files
   become: yes
   copy:
-    src: ~/project/backend.tar.gz
-    dest: ~/backend/backend.tar.gz
+    src: ~/project/artifact.tar.gz
+    dest: ~/backend/artifact.tar.gz
 - name: unpack backend files
   become: yes
   shell: |
     cd ~/backend
-    tar -vxf backend.tar.gz
-    rm -f backend.tar.gz
+    tar -vxf artifact.tar.gz
+    rm -f artifact.tar.gz
 - name: start app 
   become: yes
   shell: |
