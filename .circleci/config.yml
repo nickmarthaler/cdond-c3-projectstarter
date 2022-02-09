@@ -295,6 +295,7 @@ jobs:
           name: Install dependencies
           working_directory: ./.circleci/ansible          
           command: |
+            cat inventory.txt
             apk add --update ansible curl rsync openssh nodejs npm unzip
             npm install
             ansible --version
