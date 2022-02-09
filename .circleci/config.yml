@@ -289,7 +289,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["58:01:95:59:6e:be:db:1c:e2:4f:53:ae:f3:ed:82:40"]
       - attach_workspace:
-          at: .
+          at: .circleci/ansible
 
       - run:
           name: Install dependencies
@@ -303,14 +303,14 @@ jobs:
             pip3 install awscli
             aws --version 
             export ANSIBLE_HOST_KEY_CHECKING=False
-            
-      - run:
-          name: Get Backend IP Addr
-          command: |
-            aws ec2 describe-instances \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --output text >> .circleci/ansible/inventory.txt
-            cat .circleci/ansible/inventory.txt
+
+      # - run:
+      #     name: Get Backend IP Addr
+      #     command: |
+      #       aws ec2 describe-instances \
+      #       --query 'Reservations[*].Instances[*].PublicIpAddress' \
+      #       --output text >> .circleci/ansible/inventory.txt
+      #       cat .circleci/ansible/inventory.txt
 
       - run:
           name: install node modules
